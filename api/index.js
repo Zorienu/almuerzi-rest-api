@@ -11,6 +11,7 @@ const cors = require('cors');
 
 const meals = require('./routes/meals');
 const orders = require('./routes/orders');
+const auth = require('./routes/auth')
 
 const app = express(); // devuelve un objeto con distintos métodos para crear nuestra app
 
@@ -35,9 +36,8 @@ app.get('*', (req, res) => {
 
 app.use('/api/meals', meals);
 app.use('/api/orders', orders);
-app.get('*', (req, res) => {
-    res.send('jia');
-})
+app.use('/api/auth', auth);
+
 module.exports = app
 // luego podemos desplegar nuestra aplicación a vercel con el comando 'vercel'
 // dentro de inspect vamos a agregar la variable de entorno MONGO_URI con el valor del link de mongodb
