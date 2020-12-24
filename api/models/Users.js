@@ -11,6 +11,7 @@ const Users = mongoose.model('User', new Schema({
     email: String,
     password: String,
     salt: String, // string que vamos a utilizar para poder encriptar también nuestra constraseña
+    role: {type: String, default: 'user'} // cuando lo creemos por defecto va a ser de 'user'
 }))
 
 // exportar el modulo creado previamente

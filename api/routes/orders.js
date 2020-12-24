@@ -1,5 +1,9 @@
 const express = require('express');
 const Orders = require('../models/Orders') // importamos el modelo de meals
+const { isAuthenticated, hasRole } = require('../auth/index')
+
+// isAuthenticated se encarga de agregar el usuario al objeto de request
+// hasRole utiliza el objeto usuario dentro de request y va a preguntar si tiene un rol en particular
 
 const router = express.Router() // una instancia de un router de nuestra app
 
@@ -25,22 +29,26 @@ router.get('/:id', (req, res) => {
 })
 
 // y cuando llamemos la ruta de '/api/meals' pero con el verbo de 'post' va a ejecutar esto
-router.post('/', (req, res) => {
+router.post('/', isAuthenticated, (req, res) => {
     // con este metodo podremos crear elementos basado en lo que recibamos por el 'body' de nuestra petición
     // en este caso el body es todo lo que mandemos a través de las peticiones de post
-    Orders.create(req.body).then(x => res.status(201).send(x))
+    //Orders.create(req.body).then(x => res.status(201).send(x))
+    
+    // para crear nuestras órdenes de manera correcta, cuando estemos creando una orden, en lugar de estar recibiendo el usuario por la petición, nosotros se los asignemos por el lado del servidor, sacando el id de los usuarios que viene dentro de la request
+    const { _id } = req.user
+    Orders.create({ ...req.body, user_id: _id }).then(x => res.status(201).send(x)) // crear una copia de req.body y el user_id
     //res.send('post meals');
 })
 
 // para actualizar un elemento
 // el id es para identificar el elemento que queremos actualizar
-router.put('/:id', (req, res) => {
+router.put('/:id', isAuthenticated, hasRole('user'), (req, res) => {
     Orders.findOneAndUpdate(req.params.id, req.body)
         .then(() => res.sendStatus(204))
         // podemos decidir si le devolvemos algo al usuario o no, en este caso como nosotros ya vamos a tener estos datos por el lado del cliente, no es necesario que se los devolvamos
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', isAuthenticated, (req, res) => {
     Orders.findByIdAndDelete(req.params.id).exec().then(() => res.sendStatus(204))
 })
 
