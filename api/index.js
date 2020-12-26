@@ -6,8 +6,8 @@
 
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const bodyParser = require('body-parser'); // toma todas las peticiones que venfan a través del cuerpo del mensaje y los agrega en req.body
+const cors = require('cors'); // sin esto la app solo puede ser accedida desde el mismo dominio
 
 const meals = require('./routes/meals');
 const orders = require('./routes/orders');

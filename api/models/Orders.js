@@ -7,7 +7,8 @@ const Schema = mongoose.Schema
 const Orders = mongoose.model('Order', new Schema({
     // le tenemos que pasar un objeto, primero el tipo, pasando el esquema, con la propiedad Types en la cual le podemos indicar que tipo de dato es el que nosotros vamos a guardar si es que no es String, boolean o número podemos acceder a esta propiedad para indicarle propiedades como por ejemplo que esta es un ObjectId, indicándole que lo que vamos a guardar acá va a ser el identificador o el id de otro documento, que en este caso la referencia 'ref' es la de un documento 'Meal'
     meal_id: {type: Schema.Types.ObjectId, ref: 'Meal'},
-    user_id: String
+    user_id: String,
+    user_email: String
 }))
 
 module.exports = Orders;

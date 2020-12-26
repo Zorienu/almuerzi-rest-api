@@ -35,15 +35,15 @@ router.post('/', isAuthenticated, (req, res) => {
     //Orders.create(req.body).then(x => res.status(201).send(x))
     
     // para crear nuestras órdenes de manera correcta, cuando estemos creando una orden, en lugar de estar recibiendo el usuario por la petición, nosotros se los asignemos por el lado del servidor, sacando el id de los usuarios que viene dentro de la request
-    const { _id } = req.user
-    Orders.create({ ...req.body, user_id: _id }).then(x => res.status(201).send(x)) // crear una copia de req.body y el user_id
+    const { _id, email } = req.user
+    Orders.create({ ...req.body, user_id: _id, user_email: email }).then(x => res.status(201).send(x)) // crear una copia de req.body y el user_id
     //res.send('post meals');
 })
 
 // para actualizar un elemento
 // el id es para identificar el elemento que queremos actualizar
 router.put('/:id', isAuthenticated, hasRole('user'), (req, res) => {
-    Orders.findOneAndUpdate(req.params.id, req.body)
+    Orders.findOneAndUpdate(req.params.id, { ...req.body, user_id: _id, user_email: email })
         .then(() => res.sendStatus(204))
         // podemos decidir si le devolvemos algo al usuario o no, en este caso como nosotros ya vamos a tener estos datos por el lado del cliente, no es necesario que se los devolvamos
 })

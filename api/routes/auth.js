@@ -22,7 +22,7 @@ router.post('/register', (req, res) => {
             Users.findOne({ email }).exec() // verificar si el usuario existe y si no crearlo
                 .then(user => {
                     if (user) {
-                        return res.send('usuario ya existe'); // en caso de que encuentra un email igual
+                        return res.send('usuario ya existe'); // en caso de que encuentra un email igual (200)
                     }
                     // crear el usuario en la DBS
                     Users.create({
@@ -30,7 +30,7 @@ router.post('/register', (req, res) => {
                         password: encryptedPassword,
                         salt: newSalt,
                     }).then(() => {
-                        res.send('usuario creado con éxito')
+                        res.send('usuario creado con éxito') // (200)
                     })
                 })
         })
@@ -58,7 +58,12 @@ router.post('/login', (req, res) => {
 })
 
 router.get('/me', isAuthenticated, (req, res) => {
-    res.send(req.user)
+    const user = {
+        role: req.user.role,
+        email: req.user.email,
+        _id: req.user._id
+    }
+    res.send(user)
 })
 
 module.exports = router
